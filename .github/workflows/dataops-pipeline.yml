@@ -1,7 +1,19 @@
 name: Solution - DataOps Pipeline
 on:
   workflow_call:
-
+    inputs:
+      environment:
+        required: true
+        type: string
+      keyvault_name:
+        required: true
+        type: string
+      secret_client_id_name:
+        required: true
+        type: string
+      secret_client_secret_name:
+        required: true
+        type: string
 jobs:
   # 1. Dispara a validação de Python (Linting, Type Check, Pytest)
   Python-CI:
@@ -22,4 +34,7 @@ jobs:
     uses: caixagithub/DevSecOps-Workflow-Jobs/.github/workflows/job-databricks-deploy.yaml@main
     with:
       environment: prd
-    secrets: inherit
+      keyvault_name: ${{ inputs.keyvault_name }}
+      secret_client_id_name: ${{ inputs.secret_client_id_name }}
+      secret_client_secret_name: ${{ inputs.secret_client_secret_name }}
+    secrets: inherit 
