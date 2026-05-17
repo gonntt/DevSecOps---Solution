@@ -17,12 +17,12 @@ on:
 jobs:
   # 1. Dispara a validação de Python (Linting, Type Check, Pytest)
   Python-CI:
-    uses: caixagithub/DevSecOps-Workflow-Jobs/.github/workflows/job-dataops-python-ci.yaml@main
+    uses: gonntt/DevSecOps---workflow-jobs/.github/workflows/ci-dataops-python.yaml@main
     secrets: inherit
 
   # 2. Dispara a validação de SQL (SQLFluff) em paralelo
   SQL-CI:
-    uses: caixagithub/DevSecOps-Workflow-Jobs/.github/workflows/job-dataops-sql-ci.yaml@main
+    uses: gonntt/DevSecOps---workflow-jobs/.github/workflows/ci-dataops-sql.yaml@main
     secrets: inherit
 
   # 3. Dispara o Deploy via Databricks Asset Bundles
@@ -31,7 +31,7 @@ jobs:
     needs: [Python-CI, SQL-CI]
     # Garante que só há deploy em merges/pushes na main, nunca em Pull Requests
     if: github.ref == 'refs/heads/main'
-    uses: caixagithub/DevSecOps-Workflow-Jobs/.github/workflows/job-databricks-deploy.yaml@main
+    uses: gonntt/DevSecOps---workflow-jobs/.github/workflows/databricks-deploy.yaml@main
     with:
       environment: prd
       keyvault_name: ${{ inputs.keyvault_name }}
