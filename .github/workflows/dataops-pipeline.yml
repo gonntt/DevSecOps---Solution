@@ -33,7 +33,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     uses: gonntt/DevSecOps---workflow-jobs/.github/workflows/databricks-deploy.yml@main
     with:
-      environment: prd
+      environment: ${{ inputs.environment }}
       keyvault_name: ${{ inputs.keyvault_name }}
       secret_client_id_name: ${{ inputs.secret_client_id_name }}
       secret_client_secret_name: ${{ inputs.secret_client_secret_name }}
