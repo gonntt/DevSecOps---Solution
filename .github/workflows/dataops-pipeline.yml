@@ -27,10 +27,13 @@ jobs:
 
   # 3. Dispara o Deploy via Databricks Asset Bundles
   Deploy-Databricks-PRD:
-    # Garante que o deploy aguarda o sucesso do CI de Python e SQL
     needs: [Python-CI, SQL-CI]
-    # Garante que só há deploy em merges/pushes na main, nunca em Pull Requests
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
+    
+    # ADICIONE ESTAS 3 LINHAS AQUI:
+    permissions:
+      id-token: write
+      contents: read
     uses: gonntt/DevSecOps---workflow-jobs/.github/workflows/databricks-deploy.yml@main
     with:
       environment: ${{ inputs.environment }}
