@@ -1,0 +1,49 @@
+name: Job - Quality Gates (SonarQube)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      sistema:
+        required: false
+        type: string
+        default: "Databricks Pipeline"
+      sigla:
+        required: false
+        type: string
+        default: "DATAOPS"
+      componente:
+        required: false
+        type: string
+        default: "pipeline-vendas"
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # O Sonar precisa de todo o histórico para o Blame
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v2.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ inputs.sigla }}-${{ inputs.componente }}
+            -Dsonar.projectName=${{ inputs.sistema }}
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/tests/**,**/notebooks/teste.py
+
+      - name: SonarQube Quality Gate Check
+        uses: sonarsource/sonarqube-quality-gate-action@v1.1.0
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
