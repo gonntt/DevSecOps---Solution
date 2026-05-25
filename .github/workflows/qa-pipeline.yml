@@ -9,7 +9,7 @@ on:
       sistema:
         required: false
         type: string
-        default: "Databricks Pipeline"
+        default: "Databricks_Pipeline"
       sigla:
         required: false
         type: string
