@@ -9,15 +9,15 @@ on:
       sistema:
         required: false
         type: string
-        default: "Databricks_Pipeline"
+        default: "NomeProjeto_Databricks_nprd"
       sigla:
         required: false
         type: string
-        default: "DATAOPS"
+        default: "gonntt"
       componente:
         required: false
         type: string
-        default: "pipeline-vendas"
+        default: "NomeProjeto_Databricks_nprd"
 
 jobs:
   qa:
