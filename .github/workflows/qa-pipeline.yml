@@ -37,7 +37,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.projectKey=${{ inputs.sigla }}-${{ inputs.componente }}
+            -Dsonar.projectKey=${{ inputs.sigla }}_${{ inputs.componente }}
             -Dsonar.projectName=${{ inputs.sistema }}
             -Dsonar.sources=.
             -Dsonar.exclusions=**/tests/**,**/notebooks/teste.py
