@@ -1,0 +1,50 @@
+name: Job - Security Analysis (Trivy / SAST)
+
+# CONTRATO OBRIGATÓRIO: Permite que este arquivo seja chamado por outros repositórios
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      sistema:
+        required: false
+        type: string
+        default: "Databricks Pipeline"
+      sigla:
+        required: false
+        type: string
+        default: "DATAOPS"
+      componente:
+        required: false
+        type: string
+        default: "pipeline-vendas"
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    permissions:
+      id-token: write
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner (Repo Scan)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
